@@ -1,7 +1,7 @@
 //SPDX-License-Identifier: MIT
 pragma solidity ^0.8.24;
 
-import {Script} from "lib/forge-std/src/Script.sol";
+import {Script, console} from "lib/forge-std/src/Script.sol";
 import {Raffle} from "src/Raffle.sol";
 import {HelperConfig} from "script/HelperConfig.s.sol";
 import {CreateSubscription, FundSubscription, AddConsumer} from "script/Interactions.s.sol";
@@ -15,22 +15,15 @@ contract DeployRaffle is Script {
         HelperConfig.NetworkConfig memory config = helperConfig.getConfig();
 
         if (config.subscriptionId == 0) {
-            // create subscription
+            console.log("we are going to create a subscription!", config.subscriptionId);
+            
             CreateSubscription createSubscriptionContract = new CreateSubscription();
-            (
-                config.subscriptionId,
-                config.vrfCoordinator
-            ) = createSubscriptionContract.createSubscription(
-                config.vrfCoordinator
-            );
+            (config.subscriptionId, config.vrfCoordinator) = createSubscriptionContract.createSubscription(config.vrfCoordinator);
 
-            // fund it!!
+            console.log("we are going to fund subscription: ", config.subscriptionId);
+            
             FundSubscription fundSubscriptionContract = new FundSubscription();
-            fundSubscriptionContract.fundSubscription(
-                config.vrfCoordinator,
-                config.subscriptionId,
-                config.linkToken
-            );
+            fundSubscriptionContract.fundSubscription(config.vrfCoordinator, config.subscriptionId, config.linkToken);
         }
 
         vm.startBroadcast();
