@@ -8,8 +8,9 @@ import {HelperConfig} from "script/HelperConfig.s.sol";
 import {console} from "lib/forge-std/src/Script.sol";
 import {Vm} from "lib/forge-std/src/Vm.sol";
 import {VRFCoordinatorV2_5Mock} from "lib/chainlink-brownie-contracts/contracts/src/v0.8/vrf/mocks/VRFCoordinatorV2_5Mock.sol";
+import {CodeConstants} from "script/HelperConfig.s.sol";
 
-contract RaffleTest is Test {
+contract RaffleTest is Test, CodeConstants {
     /**
      *  State Variables ****
      */
@@ -172,12 +173,12 @@ contract RaffleTest is Test {
     /*//////////////////////////////////////////////////////////////////////
                                 FULFILL RANDOM WORDS
     //////////////////////////////////////////////////////////////////////*/
-    function testFulfillRandomWordsCanOnlyBeCalledAfterPerformUpkeep(uint256 randomRequestId) public funded raffleEntered {
+    function testFulfillRandomWordsCanOnlyBeCalledAfterPerformUpkeep(uint256 randomRequestId) public funded raffleEntered skipFork {
         vm.expectRevert(VRFCoordinatorV2_5Mock.InvalidRequest.selector);
         VRFCoordinatorV2_5Mock(vrfCoordinator).fulfillRandomWords(randomRequestId, address(raffle));
     }
 
-    function testFulfillRandomWordsPicksAWinnerResetsAndSendsMoney() public funded raffleEntered {
+    function testFulfillRandomWordsPicksAWinnerResetsAndSendsMoney() public funded raffleEntered skipFork {
         // Arrange
         uint256 additionalEntrants = 3; // 4 people in total
         uint256 startingIndex = 1;
@@ -227,6 +228,13 @@ contract RaffleTest is Test {
         raffle.enterRaffle{value: entranceFee}();
         vm.warp(block.timestamp + (interval + 1));
         vm.roll(block.number + 1);
+        _;
+    }
+
+    modifier skipFork() {
+        if (block.chainid != LOCAL_CHAIN_ID) {
+            return;
+        }
         _;
     }
 }

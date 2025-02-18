@@ -26,6 +26,7 @@ contract HelperConfig is Script, CodeConstants {
         uint32 callbackGasLimit;
         uint256 subscriptionId;
         address linkToken;
+        address account;
     }
 
     NetworkConfig public localNetworkConfig;
@@ -70,7 +71,8 @@ contract HelperConfig is Script, CodeConstants {
             gasLane: 0x787d74caea10b2b357790d5b5247c2f63d1d91572a9846f780606e4d953677ae, // doesn't matter
             callbackGasLimit: 500000,
             subscriptionId: 0,
-            linkToken: address(linkToken)
+            linkToken: address(linkToken),
+            account: 0x1804c8AB1F12E6bbf3894d4083f33e07309d1f38
         });
 
         return localNetworkConfig;
@@ -85,7 +87,8 @@ contract HelperConfig is Script, CodeConstants {
                 gasLane: 0x787d74caea10b2b357790d5b5247c2f63d1d91572a9846f780606e4d953677ae,
                 callbackGasLimit: 500000,
                 subscriptionId: 92754291229541900867687850263046259048121104794081640227452522038150619057550, //https://vrf.chain.link/
-                linkToken: 0x779877A7B0D9E8603169DdbD7836e478b4624789
+                linkToken: 0x779877A7B0D9E8603169DdbD7836e478b4624789,
+                account: 0x0Dedd6F2994C6608a7aC846EC6a1b6044777F3d4
             });
     }
 }
