@@ -26,4 +26,5 @@
 // external & public view & pure functions
 ```
 
-### Will be updated...
+### Deployed contract on Sepolia
+[0xFa2F42C93B0Be218FA38061b0A9Fe5600870bA00](https://sepolia.etherscan.io/address/0xFa2F42C93B0Be218FA38061b0A9Fe5600870bA00)
